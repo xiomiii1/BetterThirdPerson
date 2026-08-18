@@ -1,15 +1,50 @@
 # BetterThirdPerson
 
-Native Minecraft Bedrock Android client mod for LeviLaunchroid/Preloader.
+BetterThirdPerson is a native Minecraft Bedrock Android mod for
+LeviLaunchroid/Preloader.
 
-## What it does
-- Independent third-person camera yaw/pitch.
-- Camera-relative 8-way movement without continuously snapping body rotation to the camera.
-- Preserves normal third-person perspective, rendering, and interaction paths instead of replacing the renderer.
-- Uses the game's `MoveInputComponent` camera-orientation path, which is also used by Bedrock's modern camera/control systems.
+**Author:** xiomi
 
-## Important compatibility note
-This is a Bedrock Android native module. Forge, Fabric, and NeoForge are Java Edition loaders and are not supported by a `.levipack`/Preloader native module.
+**Version:** 1.0.1
+
+## Features
+
+- Independent third-person camera rotation
+- 360-degree camera control
+- Camera-relative movement
+- 8-way movement
+- Keeps player body rotation independent from camera rotation
+- Third-person perspective support
+- Local-player detection
+- Native signature resolution
+- Runtime hook installation
+- ARM64 Android build
+- Automatic `.levipack` packaging
+
+## Architecture
+
+BetterThirdPerson does not include BedrockTools.
+
+The project contains its own:
+
+- Signature definitions
+- Signature resolution
+- Hook management
+- Camera state
+- Movement transformation
+- Preloader module registration
+- `.levipack` packaging
 
 ## Build
-Use GitHub Actions or an Android xmake environment with Preloader Android and EnTT available.
+
+Install:
+
+- Android NDK
+- xmake
+- Python 3
+- Preloader Android development dependencies
+
+Configure:
+
+```bash
+xmake f -y -p android -a arm64-v8a -m release
