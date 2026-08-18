@@ -28,6 +28,7 @@ package_end()
 
 add_requires("preloader")
 add_requires("entt")
+add_requires("fmt")
 
 target("BetterThirdPerson")
 
@@ -50,7 +51,8 @@ target("BetterThirdPerson")
 
     add_packages(
         "preloader",
-        "entt"
+        "entt",
+        "fmt"
     )
 
     if is_plat("android") then
