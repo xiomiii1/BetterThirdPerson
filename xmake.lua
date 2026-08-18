@@ -24,8 +24,9 @@ target(target)
     add_includedirs("include", {public = true})
     add_packages("preloader", "entt")
     if is_plat("android") then
-        add_cxflags("-fPIC", "-Oz", "-ffunction-sections", "-fdata-sections", "-flto", "-fno-unwind-tables", "-fno-asynchronous-unwind-tables", "-fmerge-all-constants", "-fno-stack-protector", "-f[...]
-        add_cxxflags("-fno-rtti", "-fvisibility-inlines-hidden")
+        -- Common safe compiler flags for Android
+        add_cxflags("-fPIC", "-Oz", "-ffunction-sections", "-fdata-sections", "-flto", "-fno-unwind-tables", "-fno-asynchronous-unwind-tables", "-fmerge-all-constants", "-fno-stack-protector", "-fno-exceptions")
+        add_cxxflags("-fno-rtti", "-fvisibility-inlines-hidden", "-fno-exceptions")
         add_shflags("-Wl,--gc-sections", "-Wl,--icf=all", "-flto", "-Wl,--hash-style=gnu", "-Wl,-z,max-page-size=16384")
         add_links("android", "log", "EGL", "GLESv3", "GLESv2")
     end
@@ -34,6 +35,7 @@ target(target)
         import("lib.detect.find_tool")
         local python = find_tool("python3") or find_tool("python")
         assert(python, "Python 3 is required")
-        local args = {path.join(os.projectdir(), "scripts", "package_levipack.py"), "--library", target:targetfile(), "--icon", path.join(os.projectdir(), "assets", "betterthirdperson.png"), "--ve[...]
+        -- Call packaging script with required arguments only to avoid syntax/truncation issues
+        local args = {path.join(os.projectdir(), "scripts", "package_levipack.py"), "--library", target:targetfile(), "--icon", path.join(os.projectdir(), "assets", "betterthirdperson.png")}
         os.vrunv(python.program, args)
     end)
