@@ -24,7 +24,7 @@ target(target)
     add_includedirs("include", {public = true})
     add_packages("preloader", "entt")
     if is_plat("android") then
-        add_cxflags("-fPIC", "-Oz", "-ffunction-sections", "-fdata-sections", "-flto", "-fno-unwind-tables", "-fno-asynchronous-unwind-tables", "-fmerge-all-constants", "-fno-stack-protector", "-fexceptions", "-w", "-fvisibility=hidden")
+        add_cxflags("-fPIC", "-Oz", "-ffunction-sections", "-fdata-sections", "-flto", "-fno-unwind-tables", "-fno-asynchronous-unwind-tables", "-fmerge-all-constants", "-fno-stack-protector", "-f[...]
         add_cxxflags("-fno-rtti", "-fvisibility-inlines-hidden")
         add_shflags("-Wl,--gc-sections", "-Wl,--icf=all", "-flto", "-Wl,--hash-style=gnu", "-Wl,-z,max-page-size=16384")
         add_links("android", "log", "EGL", "GLESv3", "GLESv2")
@@ -34,6 +34,6 @@ target(target)
         import("lib.detect.find_tool")
         local python = find_tool("python3") or find_tool("python")
         assert(python, "Python 3 is required")
-        local args = {path.join(os.projectdir(), "scripts", "package_levipack.py"), "--library", target:targetfile(), "--icon", path.join(os.projectdir(), "assets", "betterthirdperson.png"), "--version-header", path.join(os.projectdir(), "include", "betterthirdperson", "Version.hpp"), "--output", path.join(target:targetdir(), "BetterThirdPerson.levipack")}
+        local args = {path.join(os.projectdir(), "scripts", "package_levipack.py"), "--library", target:targetfile(), "--icon", path.join(os.projectdir(), "assets", "betterthirdperson.png"), "--ve[...]
         os.vrunv(python.program, args)
-    end
+    end)
