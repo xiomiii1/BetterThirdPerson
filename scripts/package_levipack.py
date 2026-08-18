@@ -6,13 +6,21 @@ from pathlib import Path
 
 
 def read_metadata(version_header: Path) -> dict[str, str]:
-    text = version_header.read_text(encoding="utf-8")
+    text = version_header.read_text(
+        encoding="utf-8"
+    )
 
     values: dict[str, str] = {}
 
-    for key in ("Name", "Author", "Description", "Version"):
+    for key in (
+        "Name",
+        "Author",
+        "Description",
+        "Version",
+    ):
         pattern = re.compile(
-            rf'inline\s+constexpr\s+std::string_view\s+{re.escape(key)}\s*=\s*"([^"]*)"\s*;',
+            rf'inline\s+constexpr\s+std::string_view\s+'
+            rf'{re.escape(key)}\s*=\s*"([^"]*)"\s*;',
             re.MULTILINE,
         )
 
@@ -34,13 +42,21 @@ def write_package(
     output: Path,
     version_header: Path,
 ) -> None:
-    for required in (library, icon, version_header):
+
+    for required in (
+        library,
+        icon,
+        version_header,
+    ):
         if not required.is_file():
             raise FileNotFoundError(
-                f"Required file does not exist: {required}"
+                f"Required file does not exist: "
+                f"{required}"
             )
 
-    values = read_metadata(version_header)
+    values = read_metadata(
+        version_header
+    )
 
     manifest = {
         "type": "preload-native",
@@ -50,11 +66,16 @@ def write_package(
         "version": values["Version"],
         "entry": "libBetterThirdPerson.so",
         "icon": "icon.png",
-        "overwrite_files": ["icon.png"],
+        "overwrite_files": [
+            "icon.png"
+        ],
         "overwrite_folders": [],
     }
 
-    output.parent.mkdir(parents=True, exist_ok=True)
+    output.parent.mkdir(
+        parents=True,
+        exist_ok=True
+    )
 
     if output.exists():
         output.unlink()
@@ -65,9 +86,13 @@ def write_package(
         compression=zipfile.ZIP_DEFLATED,
         compresslevel=9,
     ) as archive:
+
         archive.writestr(
             "manifest.json",
-            json.dumps(manifest, indent=2) + "\n",
+            json.dumps(
+                manifest,
+                indent=2
+            ) + "\n",
         )
 
         archive.write(
@@ -80,22 +105,31 @@ def write_package(
             "icon.png",
         )
 
-    with zipfile.ZipFile(output, "r") as archive:
+    with zipfile.ZipFile(
+        output,
+        "r"
+    ) as archive:
+
         expected = {
             "manifest.json",
             "libBetterThirdPerson.so",
             "icon.png",
         }
 
-        actual = set(archive.namelist())
+        actual = set(
+            archive.namelist()
+        )
 
         if actual != expected:
             raise RuntimeError(
-                f"Invalid .levipack contents: {actual}"
+                f"Invalid .levipack contents: "
+                f"{actual}"
             )
 
         packaged_manifest = json.loads(
-            archive.read("manifest.json")
+            archive.read(
+                "manifest.json"
+            )
         )
 
         if packaged_manifest != manifest:
@@ -105,8 +139,11 @@ def write_package(
 
 
 def main() -> None:
+
     parser = argparse.ArgumentParser(
-        description="Package BetterThirdPerson as a .levipack"
+        description=
+            "Package BetterThirdPerson "
+            "as a .levipack"
     )
 
     parser.add_argument(
@@ -142,7 +179,9 @@ def main() -> None:
         args.version_header,
     )
 
-    print(args.output.resolve())
+    print(
+        args.output.resolve()
+    )
 
 
 if __name__ == "__main__":
