@@ -5,35 +5,56 @@ set_policy("package.requires_lock", true)
 package("preloader")
     set_homepage("https://github.com/LiteLDev/preloader-android")
     set_description("Preloader Android")
-    add_urls("https://github.com/LiteLDev/preloader-android.git")
-    add_versions("main", "main")
+
+    add_urls(
+        "https://github.com/LiteLDev/preloader-android.git"
+    )
+
+    add_versions(
+        "main",
+        "main"
+    )
 
     add_deps("cmake")
 
-    on_install("android", function(package)
-        import("package.tools.cmake").install(package)
-    end)
+    on_install(
+        "android",
+        function(package)
+            import("package.tools.cmake")
+            cmake.install(package)
+        end
+    )
 package_end()
 
 add_requires("preloader")
 add_requires("entt")
 
-local target_name = "BetterThirdPerson"
+target("BetterThirdPerson")
 
-target(target_name)
     set_kind("shared")
+
     set_languages("c++20")
+
     set_strip("all")
 
-    add_files("src/*.cpp")
+    add_files(
+        "src/*.cpp"
+    )
 
-    add_includedirs("include", {
-        public = true
-    })
+    add_includedirs(
+        "include",
+        {
+            public = true
+        }
+    )
 
-    add_packages("preloader", "entt")
+    add_packages(
+        "preloader",
+        "entt"
+    )
 
     if is_plat("android") then
+
         add_cxflags(
             "-fPIC",
             "-Oz",
@@ -69,58 +90,79 @@ target(target_name)
             "GLESv3",
             "GLESv2"
         )
+
     end
 
-    after_build(function(target)
-        if not target:is_plat("android") then
-            return
-        end
+    after_build(
+        function(target)
 
-        import("lib.detect.find_tool")
+            if not target:is_plat("android") then
+                return
+            end
 
-        local python =
-            find_tool("python3") or
-            find_tool("python")
+            import("lib.detect.find_tool")
 
-        assert(
-            python,
-            "Python 3 is required to package BetterThirdPerson.levipack"
-        )
+            local python =
+                find_tool("python3")
 
-        local args = {
-            path.join(
-                os.projectdir(),
-                "scripts",
-                "package_levipack.py"
-            ),
+            if not python then
+                python =
+                    find_tool("python")
+            end
 
-            "--library",
-            target:targetfile(),
-
-            "--icon",
-            path.join(
-                os.projectdir(),
-                "assets",
-                "betterthirdperson.png"
-            ),
-
-            "--version-header",
-            path.join(
-                os.projectdir(),
-                "include",
-                "betterthirdperson",
-                "Version.hpp"
-            ),
-
-            "--output",
-            path.join(
-                target:targetdir(),
-                "BetterThirdPerson.levipack"
+            assert(
+                python,
+                "Python 3 is required to package BetterThirdPerson.levipack"
             )
-        }
 
-        os.vrunv(
-            python.program,
-            args
-        )
-    end
+            local package_script =
+                path.join(
+                    os.projectdir(),
+                    "scripts",
+                    "package_levipack.py"
+                )
+
+            local icon =
+                path.join(
+                    os.projectdir(),
+                    "assets",
+                    "betterthirdperson.png"
+                )
+
+            local version_header =
+                path.join(
+                    os.projectdir(),
+                    "include",
+                    "betterthirdperson",
+                    "Version.hpp"
+                )
+
+            local output =
+                path.join(
+                    target:targetdir(),
+                    "BetterThirdPerson.levipack"
+                )
+
+            os.vrunv(
+                python.program,
+                {
+                    package_script,
+
+                    "--library",
+                    target:targetfile(),
+
+                    "--icon",
+                    icon,
+
+                    "--version-header",
+                    version_header,
+
+                    "--output",
+                    output
+                }
+            )
+
+        end
+    )
+
+target_end()
