@@ -1,5 +1,4 @@
 add_rules("mode.debug", "mode.release")
-
 set_policy("package.requires_lock", true)
 
 package("preloader")
@@ -20,15 +19,13 @@ package("preloader")
     on_install(
         "android",
         function(package)
-            import("package.tools.cmake")
-            cmake.install(package)
+            import("package.tools.cmake").install(package)
         end
     )
 package_end()
 
 add_requires("preloader")
 add_requires("entt")
-add_requires("fmt")
 
 target("BetterThirdPerson")
 
@@ -51,8 +48,7 @@ target("BetterThirdPerson")
 
     add_packages(
         "preloader",
-        "entt",
-        "fmt"
+        "entt"
     )
 
     if is_plat("android") then
