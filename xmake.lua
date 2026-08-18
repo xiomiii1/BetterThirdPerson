@@ -14,7 +14,7 @@ package("preloader")
         "main"
     )
 
-    add_deps("cmake")
+    add_deps("cmake", "fmt")
 
     on_install(
         "android",
