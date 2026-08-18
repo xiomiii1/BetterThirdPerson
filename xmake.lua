@@ -25,7 +25,7 @@ target(target)
     add_packages("preloader", "entt")
     if is_plat("android") then
         -- Common safe compiler flags for Android
-        add_cxflags("-fPIC", "-Oz", "-ffunction-sections", "-fdata-sections", "-flto", "-fno-unwind-tables", "-fno-asynchronous-unwind-tables", "-fmerge-all-constants", "-fno-stack-protector", "-fno-exceptions")
+        add_cxflags("-fPIC", "-Oz", "-ffunction-sections", "-fdata-sections", "-flto", "-fno-unwind-tables", "-fno-asynchronous-unwind-tables", "-fmerge-all-constants", "-fno-stack-protector")
         add_cxxflags("-fno-rtti", "-fvisibility-inlines-hidden", "-fno-exceptions")
         add_shflags("-Wl,--gc-sections", "-Wl,--icf=all", "-flto", "-Wl,--hash-style=gnu", "-Wl,-z,max-page-size=16384")
         add_links("android", "log", "EGL", "GLESv3", "GLESv2")
